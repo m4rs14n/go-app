@@ -82,7 +82,7 @@ func (b *localBus) HandleBroadcast(message interface{}) {
 // SendMessage sends the message to a specific client asynchronously
 func (b *localBus) HandleMessage(uuid uuid.UUID, message interface{}) (<-chan interface{}, error) {
 	if endpoint, ok := endpoints[uuid]; ok {
-		return endpoint.HandleMessage(message), nil
+		return endpoint.HandleMessage(message)
 	}
 
 	return nil, errors.New("Invalid endpoint")

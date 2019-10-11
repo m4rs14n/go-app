@@ -50,8 +50,10 @@ func main() {
 	plugin.Start(done)
 
 	if storage, ok := plugin.(shared.Storage); ok {
-		response := <-storage.Read("/path")
-		fmt.Printf("Read: %v\n", response)
+		if ch := storage.Read("/path"); ch != nil {
+			response := <-ch
+			fmt.Printf("Read: %v\n", response)
+		}
 	}
 
 	// Read a char to make sure we get all the messages (boardcast is async)

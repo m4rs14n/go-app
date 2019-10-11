@@ -35,7 +35,7 @@ import (
 )
 
 const (
-	// BusSettingPriority
+	// BusSettingPriority is the key for the priority in the plugin settings
 	BusSettingPriority = "priority"
 )
 
@@ -63,7 +63,7 @@ type Endpoint interface {
 	// HandleBroadcast handles bus broadcasts
 	HandleBroadcast(message interface{})
 	// HandleMessage handles bus messages
-	HandleMessage(message interface{}) <-chan interface{}
+	HandleMessage(message interface{}) (<-chan interface{}, error)
 }
 
 // UseBus allows a plugin to have access to logging

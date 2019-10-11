@@ -28,6 +28,7 @@
 package main
 
 import (
+	"errors"
 	"log"
 
 	"github.com/m4rs14n/go-app/shared"
@@ -61,7 +62,7 @@ func (s *unencryptedStorage) HandleBroadcast(message interface{}) {
 }
 
 // SendMessage sends the message to a specific client asynchronously
-func (s *unencryptedStorage) HandleMessage(message interface{}) <-chan interface{} {
+func (s *unencryptedStorage) HandleMessage(message interface{}) (<-chan interface{}, error) {
 	if storageMsg, ok := message.(shared.StorageMessage); ok {
 		switch storageMsg.Type {
 		case shared.StorageMessageTypeRead:
@@ -72,14 +73,14 @@ func (s *unencryptedStorage) HandleMessage(message interface{}) <-chan interface
 				close(ch)
 			}()
 
-			return ch
+			return ch, nil
 
 		case shared.StorageMessageTypeWrite:
 			disk[storageMsg.Path] = storageMsg.Value
-			return nil
+			return nil, nil
 		}
 	}
 
-	log.Fatal("Invalid message")
-	return nil
+	log.Print("Invalid message")
+	return nil, errors.New("Invalid message")
 }

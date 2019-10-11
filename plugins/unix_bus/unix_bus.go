@@ -126,8 +126,8 @@ func (b *unixBus) PluginLoaded(plugin shared.Plugin) {
 							endpoint.HandleBroadcast(req.Message)
 
 						case messageTypeSend:
-							ch := endpoint.HandleMessage(req.Message)
-							if ch != nil {
+							ch, err := endpoint.HandleMessage(req.Message)
+							if err == nil {
 								enc := gob.NewEncoder(c)
 								for res := range ch {
 									err = enc.Encode(message{Type: messageTypeResult, Message: res})
